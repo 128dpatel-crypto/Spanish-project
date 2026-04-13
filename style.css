@@ -1,0 +1,369 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Caveat', cursive;
+    /* Scrapbook textured background */
+    background-color: #e3dcc8;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.15'/%3E%3C/svg%3E");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    color: #333;
+}
+
+.scrapbook-container {
+    background-color: #faf6eb;
+    width: 90%;
+    max-width: 900px;
+    height: 85vh;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.05);
+    position: relative;
+    padding: 40px;
+    background-image:
+        repeating-linear-gradient(#f0ebe1 0 1px, transparent 1px 100%),
+        repeating-linear-gradient(90deg, #f0ebe1 0 1px, transparent 1px 100%);
+    background-size: 20px 20px;
+    border: 2px solid #d4cdbb;
+}
+
+/* Notebook holes pattern */
+.scrapbook-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    width: 2px;
+    background: transparent;
+    border-left: 2px dashed #d1a5a5;
+}
+
+.slide {
+    position: absolute;
+    top: 40px;
+    left: 60px;
+    right: 40px;
+    bottom: 100px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: scale(0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* This allows title top, image middle, text box bottom */
+    align-items: center;
+    text-align: center;
+}
+
+.slide.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    z-index: 10;
+}
+
+/* New Title Box styling */
+.title-box {
+    background-color: white; /* Looks like a cut-out paper strip */
+    border: 1px dashed #bbb;
+    padding: 5px 25px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+    min-height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotate(1deg);
+    margin-top: -10px; /* pull up occasionally */
+}
+/* tape for the title box */
+.title-box::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: -20px;
+    width: 60px;
+    height: 25px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transform: rotate(-15deg);
+    border-left: 2px dashed rgba(255,255,255,0.8);
+    border-right: 2px dashed rgba(255,255,255,0.8);
+    backdrop-filter: blur(2px);
+    z-index: 2;
+}
+.title-box::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -20px;
+    width: 60px;
+    height: 25px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transform: rotate(10deg);
+    border-left: 2px dashed rgba(255,255,255,0.8);
+    border-right: 2px dashed rgba(255,255,255,0.8);
+    backdrop-filter: blur(2px);
+    z-index: 2;
+}
+
+.title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 3.5rem;
+    color: #b73232;
+    margin-bottom: 0px;
+    transform: rotate(-2deg);
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.slide-title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 2.8rem;
+    color: #2b5585;
+    margin-bottom: 0px;
+    transform: rotate(1deg);
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
+}
+
+/* New specific text-box styling */
+.info-box {
+    background-color: #fffac8;
+    /* Sticky note yellow */
+    padding: 10px 20px;
+    box-shadow: 2px 3px 10px rgba(0, 0, 0, 0.15);
+    transform: rotate(1.5deg);
+    border-radius: 2px 12px 3px 10px;
+    width: 80%;
+    max-width: 650px;
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+    min-height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #e8e3bd;
+    margin-top: 15px;
+    /* ensure spacing from photo above it */
+}
+
+/* A piece of tape for the text box */
+.info-box::after {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    width: 40px;
+    height: 18px;
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transform: translateX(-50%) rotate(-3deg);
+    border-left: 2px dashed rgba(255, 255, 255, 0.8);
+    border-right: 2px dashed rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(2px);
+}
+
+.sentence {
+    font-size: 2.2rem;
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 2rem;
+    color: #444;
+}
+
+/* Hiding logic for the specific interactive elements! */
+/* We target EVERYTHING inside `.text-box-trigger` */
+.text-box-trigger > * {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
+    pointer-events: none;
+}
+
+/* When the TRIGGER has `.show-text`, make elements visible */
+.text-box-trigger.show-text > * {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Polaroid style */
+.polaroid {
+    background: white;
+    padding: 15px 15px 40px 15px;
+    box-shadow: 2px 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    max-width: 500px;
+    width: 100%;
+    margin-top: auto;
+    /* push downwards from title */
+    margin-bottom: auto;
+    /* push upwards from info-box */
+}
+
+/* Make image frames NOT indicate they are clickable anymore */
+.polaroid {
+    cursor: default;
+}
+
+.polaroid img {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    display: block;
+}
+
+.polaroid .caption {
+    font-family: 'Caveat', cursive;
+    font-size: 2rem;
+    color: #333;
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+/* Tape effect for photos and charts */
+.tape {
+    background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    width: 130px;
+    height: 35px;
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    z-index: 2;
+    backdrop-filter: blur(2px);
+    border-left: 2px dashed rgba(255, 255, 255, 0.8);
+    border-right: 2px dashed rgba(255, 255, 255, 0.8);
+}
+
+/* Chart Container */
+.chart-container {
+    background-color: #fffde7;
+    padding: 20px;
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.15);
+    transform: rotate(1deg);
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    border: 1px solid #e0dbce;
+    margin: auto;
+    cursor: pointer;
+    min-height: 200px;
+    /* To make it a clickable empty canvas */
+}
+
+.scrapbook-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.8rem;
+    text-align: left;
+}
+
+.scrapbook-table th {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 2rem;
+    border-bottom: 2px solid #555;
+    padding: 10px;
+    color: #4a2b6e;
+}
+
+.scrapbook-table td {
+    padding: 10px;
+    border-bottom: 1px dashed #aaa;
+}
+
+/* Navigation Controls */
+.controls {
+    position: absolute;
+    bottom: 30px;
+    left: 60px;
+    right: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-btn {
+    background-color: #3d6a99;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+.nav-btn:hover {
+    background-color: #2b5585;
+}
+
+.nav-btn:active {
+    transform: scale(0.95);
+}
+
+.nav-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+#slide-counter {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .scrapbook-container {
+        width: 95%;
+        padding: 20px;
+        left: 0;
+    }
+
+    .slide {
+        left: 40px;
+        right: 20px;
+    }
+
+    .title {
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.5rem;
+    }
+
+    .sentence {
+        font-size: 1.5rem;
+    }
+
+    .polaroid img {
+        height: 200px;
+    }
+
+    .scrapbook-table {
+        font-size: 1.2rem;
+    }
+}
